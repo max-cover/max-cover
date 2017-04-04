@@ -1,0 +1,33 @@
+{
+  "name": "max-cover",
+  "version": "0.0.0",
+  "description": "Site and badge system to display true value of testing in your project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/max-cover/max-cover.git"
+  },
+  "keywords": [
+    "unit",
+    "test",
+    "end",
+    "to",
+    "end",
+    "e2e",
+    "component",
+    "karma",
+    "jasmine",
+    "coverage",
+    "cover",
+    "max"
+  ],
+  "author": "unimonkiez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/max-cover/max-cover/issues"
+  },
+  "homepage": "https://github.com/max-cover/max-cover#readme"
+}
