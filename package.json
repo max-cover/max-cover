@@ -2,32 +2,42 @@
   "name": "max-cover",
   "version": "0.0.0",
   "description": "Site and badge system to display true value of testing in your project",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "keywords": [
+    "component",
+    "cover",
+    "coverage",
+    "e2e",
+    "end",
+    "jasmine",
+    "karma",
+    "max",
+    "test",
+    "to",
+    "unit"
+  ],
+  "homepage": "https://github.com/max-cover/max-cover#readme",
+  "bugs": {
+    "url": "https://github.com/max-cover/max-cover/issues"
   },
+  "license": "ISC",
+  "author": "unimonkiez",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/max-cover/max-cover.git"
   },
-  "keywords": [
-    "unit",
-    "test",
-    "end",
-    "to",
-    "end",
-    "e2e",
-    "component",
-    "karma",
-    "jasmine",
-    "coverage",
-    "cover",
-    "max"
-  ],
-  "author": "unimonkiez",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/max-cover/max-cover/issues"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/max-cover/max-cover#readme"
+  "dependencies": {
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1"
+  }
 }
