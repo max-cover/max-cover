@@ -30,6 +30,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "decamelize": "^1.2.0",
+    "lcov-parse": "^0.0.10",
     "request": "^2.81.0"
   },
   "devDependencies": {

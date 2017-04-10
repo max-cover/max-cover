@@ -1,7 +1,5 @@
 const request = require('request');
 
-const coverageUrl = 'someUrl1';
-const gitDataUrl = 'someUrl2';
 
 const send = ({ data, url }) => new Promise((res, rej) => {
   request({
@@ -29,16 +27,11 @@ module.exports = ({
   coverage,
   gitData
 }) => {
-  return Promise.all(
-    [
-      send({
-        url: coverageUrl,
-        data: coverage
-      }),
-      send({
-        url: gitDataUrl,
-        data: gitData
-      })
-    ]
-  );
+  return send({
+    url: 'someUrl',
+    data: {
+      coverage,
+      gitData
+    }
+  });
 };

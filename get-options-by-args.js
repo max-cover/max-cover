@@ -1,6 +1,7 @@
 const path = require('path');
+const decamelize = require('decamelize');
 
-const paramPrefix = '--';
+const nameToCLName = name => `--${decamelize(name, '-')}`; // `lcovPath` => `--lcov-path`
 const requiredParams = [
   'lcovPath'
 ];
@@ -27,13 +28,14 @@ module.exports = args => {
 
   // Add requiredParams to options object
   requiredParams.forEach(requiredParam => {
-    const requiredParamIndex = args.indexOf(paramPrefix + requiredParam);
+    const cLName = nameToCLName(requiredParam);
+    const requiredParamIndex = args.indexOf(cLName);
     if (requiredParamIndex === -1) {
-      throw Error(`Must provide '${paramPrefix}${requiredParam}'.`);
+      throw Error(`Must provide '${cLName}'.`);
     } else {
       const requiredParamValue = args[requiredParamIndex + 1];
       if (requiredParamValue === undefined) {
-        throw Error(`Must provide '${paramPrefix}${requiredParam}' with value.`);
+        throw Error(`Must provide '${cLName}' with value.`);
       } else {
         options = Object.assign({}, options, {
           [requiredParam]: requiredParamValue
@@ -44,11 +46,12 @@ module.exports = args => {
 
   // Add params to options object
   params.forEach(param => {
-    const paramIndex = args.indexOf(paramPrefix + param);
+    const cLName = nameToCLName(param);
+    const paramIndex = args.indexOf(cLName);
     if (paramIndex !== -1) {
       const paramValue = args[paramIndex + 1];
       if (paramValue === undefined) {
-        throw Error(`Must provide '${paramPrefix}${param}' with value.`);
+        throw Error(`Must provide '${cLName}' with value.`);
       } else {
         options = Object.assign({}, options, {
           [param]: paramValue
@@ -59,7 +62,8 @@ module.exports = args => {
 
   // Add booleanParams to options object
   booleanParams.forEach(booleanParam => {
-    const booleanParamValue = args.indexOf(paramPrefix + booleanParam) !== -1;
+    const cLName = nameToCLName(booleanParam);
+    const booleanParamValue = args.indexOf(cLName) !== -1;
     options = Object.assign({}, options, {
       [booleanParam]: booleanParamValue
     });
