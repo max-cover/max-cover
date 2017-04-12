@@ -1,7 +1,10 @@
 const request = require('request');
 
 
-const send = ({ data, url }) => new Promise((res, rej) => {
+const send = ({
+  data,
+  url
+}) => new Promise((res, rej) => {
   request({
     method: 'POST',
     url,
@@ -23,15 +26,7 @@ const send = ({ data, url }) => new Promise((res, rej) => {
   });
 });
 
-module.exports = ({
-  coverage,
-  gitData
-}) => {
-  return send({
-    url: 'someUrl',
-    data: {
-      coverage,
-      gitData
-    }
-  });
-};
+module.exports = (data, { appUrl }) => send({
+  url: `${appUrl}/api/data`,
+  data
+});

@@ -32,7 +32,8 @@
   "dependencies": {
     "decamelize": "^1.2.0",
     "lcov-parse": "^0.0.10",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "simple-git": "^1.70.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",

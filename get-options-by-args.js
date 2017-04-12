@@ -6,7 +6,8 @@ const requiredParams = [
   'lcovPath'
 ];
 const params = [
-  'gitPath'
+  'gitPath',
+  'appPath'
 ];
 const booleanParams = [
 ];
@@ -23,7 +24,8 @@ console.log(cwd);
 
 module.exports = args => {
   let options = {
-    gitPath: cwd
+    gitPath: cwd,
+    appPath: '10.0.0.3:8080'
   };
 
   // Add requiredParams to options object

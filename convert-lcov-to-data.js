@@ -1,10 +1,13 @@
 const lcovParse = require('lcov-parse');
 const path = require('path');
+const readPromise = require('./read-promise.js');
 
-module.exports = ({
-  gitPath,
-  input
-}) => new Promise((res, rej) => {
+module.exports = (
+  input,
+  {
+    gitPath
+  }
+) => new Promise((res, rej) => {
   lcovParse(input, (parseErr, lcovData) => {
     if (parseErr) {
       rej(parseErr);
@@ -18,4 +21,13 @@ module.exports = ({
       res(data);
     }
   });
-});
+}).then(data => Promise.all(
+  data.map(lcovFileData => readPromise(
+    path.join(gitPath, lcovFileData.file)
+  ).then(source => Object.assign(
+    {
+      source
+    },
+    lcovFileData
+  )))
+));
