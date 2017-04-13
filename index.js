@@ -9,9 +9,9 @@ const getOptions = require('./get-options.js');
 // Promise imports
 const readPromise = require('./read-promise.js');
 const getCommitIds = require('./get-commit-ids.js');
-const getCommitEdits = require('./get-commit-edits.js');
+const getCommitFiles = require('./get-commit-files.js');
 const getCommitDetails = require('./get-commit-details.js');
-const convertLcovToData = require('./convert-lcov-to-data.js');
+const getFilesCoverageByLcov = require('./get-files-coverage-by-lcov.js');
 const sendData = require('./send-data.js');
 
 const options = getOptions();
@@ -31,30 +31,37 @@ Promise.all(
     .then(commitIds => Promise.all(
       [
         Promise.all(commitIds.map(commitId => getCommitDetails(commitId, config))),
-        Promise.all(commitIds.map(commitId => getCommitEdits(commitId, config)))
+        Promise.all(commitIds.map(commitId => getCommitFiles(commitId, config)))
       ]
     )
     .then(([
       commitsDetails,
       commitsFiles
     ]) => {
-      // transform commits arrays to single object with key - commit id, value - commit details and files
-      const commits = {};
+      // transform commits arrays to single array
+      const target = [];
 
       commitIds.forEach((commitId, commitIdIndex) => {
         const commitDetails = commitsDetails[commitIdIndex];
         const commitFiles = commitsFiles[commitIdIndex];
 
-        commits[commitId] = Object.assign({
-          files: commitFiles
-        }, commitDetails);
+        target.push(
+          Object.assign(
+            {},
+            commitDetails,
+            {
+              files: commitFiles,
+              hash: commitId
+            }
+          )
+        );
       });
 
-      return commits;
+      return target;
     })
     ),
     readPromise(config.lcovPath)
-    .then(lcovInput => convertLcovToData(lcovInput, config))
+    .then(lcovInput => getFilesCoverageByLcov(lcovInput, config))
   ]
 ).then(([
   history,
@@ -65,56 +72,57 @@ Promise.all(
   coverage
 }, config))
 .catch(err => {
-  throw err;
+  console.error(err);
+  process.exit(1);
 });
 
 /* example sent data -
+
+ --- NOTES ---
+* `data.history` array is sorted by `git log` command.
+* `data.history[index].files` and `data.coverage` are both files object where key is the file name relative to the git root.
+* Nonrelevent lines are simply missing from `data.coverage[file].lines` array.
+
 {
   "branch": "master",
-  "history": {
-    "9e3193539da2da70df8e5b8dc8487e63978ec15d": {
-      "files": [
-        {
-          "file": "convert-lcov-to-data.js",
-          "changes": 10,
-          "insertions": 2,
-          "deletions": 2
+  "history": [
+    {
+      "date": "2017-04-13 01:50:15 +0300",
+      "message": "Finished gathering data and sending it to given url (HEAD, origin/master, master)",
+      "authorName": "Yuval Saraf",
+      "authorEmail": "unimonkiez@gmail.com",
+      "files": {
+        "convert-lcov-to-data.js": {
+          "changes": 33,
+          "insertions": 0,
+          "deletions": 33
         },
-        {
-          "file": "get-options-by-args.js",
-          "changes": 6,
-          "insertions": 2,
-          "deletions": 1
-        },
-        {
-          "file": "index.js",
-          "changes": 121,
-          "insertions": 34,
+        "get-commit-edits.js": {
+          "changes": 14,
+          "insertions": 0,
           "deletions": 14
         },
-        {
-          "file": "package.json",
-          "changes": 3,
+        "get-options-by-args.js": {
+          "changes": 4,
           "insertions": 1,
-          "deletions": 1
+          "deletions": 3
         },
-        {
-          "file": "send-data.js",
-          "changes": 22,
-          "insertions": 4,
+        "get-options-by-env.js": {
+          "changes": 5,
+          "insertions": 0,
           "deletions": 5
+        },
+        "index.js": {
+          "changes": 27,
+          "insertions": 17,
+          "deletions": 10
         }
-      ],
-      "date": "2017-04-10 14:31:51 +0300",
-      "message": "Gathered lcov details (HEAD, origin/master, master)",
-      "authorName": "Yuval Saraf",
-      "authorEmail": "unimonkiez@gmail.com"
+      },
+      "hash": "5fe7d5d60605748706b400dfb83e38916cfae4e6"
     }
-  },
-  "coverage": [
-    {
-      "file": "index.js",
-      "source": "...", // all the source of the file! MUHAHA
+  ],
+  "coverage": {
+    "index.js": {
       "lines": [
         {
           "line": 1,
@@ -152,8 +160,24 @@ Promise.all(
           "line": 16,
           "hit": 1
         }
-      ]
+      ],
+      "branches": [
+        {
+          "line": 1,
+          "block": 1,
+          "branch": 0,
+          "taken": 1
+        }
+      ],
+      "functions": [
+        {
+          "name": "(anonymous_1)",
+          "line": 7,
+          "hit": 9
+        }
+      ],
+      "source": "..."
     }
-  ]
+  }
 }
 */

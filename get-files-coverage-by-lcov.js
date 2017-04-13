@@ -1,6 +1,7 @@
 const lcovParse = require('lcov-parse');
 const path = require('path');
 const readPromise = require('./read-promise.js');
+const arrayToMappedObject = require('./array-to-mapped-object.js');
 
 module.exports = (
   input,
@@ -14,20 +15,26 @@ module.exports = (
     } else {
       const data = lcovData.map(
         lcovFileData => ({
-          file: path.relative(gitPath, lcovFileData.file),
-          lines: lcovFileData.lines.details
+          fileName: path.relative(gitPath, lcovFileData.file),
+          lines: lcovFileData.lines.details,
+          branches: lcovFileData.branches.details,
+          functions: lcovFileData.functions.details
         })
       );
       res(data);
     }
   });
-}).then(data => Promise.all(
+})
+.then(data => Promise.all(
+  // Add source to files
   data.map(lcovFileData => readPromise(
-    path.join(gitPath, lcovFileData.file)
+    path.join(gitPath, lcovFileData.fileName)
   ).then(source => Object.assign(
+    {},
+    lcovFileData,
     {
       source
-    },
-    lcovFileData
+    }
   )))
-));
+))
+.then(arrayToMappedObject('fileName'));

@@ -12,16 +12,13 @@ const send = ({
   }, (err, response, body) => {
     if (err) {
       rej(err);
+    } else if (!response.ok) {
+      rej({
+        response,
+        body
+      });
     } else {
-      const { statusCode } = response;
-      if (statusCode !== 200) {
-        rej({
-          statusCode,
-          body
-        });
-      } else {
-        res(body);
-      }
+      res(body);
     }
   });
 });

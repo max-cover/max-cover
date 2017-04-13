@@ -7,7 +7,7 @@ const requiredParams = [
 ];
 const params = [
   'gitPath',
-  'appPath'
+  'appUrl'
 ];
 const booleanParams = [
 ];
@@ -20,12 +20,10 @@ const pathsParams = [
 
 const cwd = process.cwd();
 
-console.log(cwd);
-
 module.exports = args => {
   let options = {
     gitPath: cwd,
-    appPath: '10.0.0.3:8080'
+    appUrl: 'http://10.0.0.3:8080'
   };
 
   // Add requiredParams to options object

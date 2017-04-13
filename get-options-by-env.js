@@ -7,11 +7,6 @@ const params = [
   'maxCoverToken'
 ];
 
-
-const cwd = process.cwd();
-
-console.log(cwd);
-
 module.exports = env => {
   let options = {};
 
