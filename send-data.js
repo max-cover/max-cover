@@ -6,13 +6,16 @@ const send = ({
   url
 }) => new Promise((res, rej) => {
   request({
-    method: 'POST',
     url,
-    form: data
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(data)
   }, (err, response, body) => {
     if (err) {
       rej(err);
-    } else if (!response.ok) {
+    } else if (response.statusCode !== 200) {
       rej({
         response,
         body
