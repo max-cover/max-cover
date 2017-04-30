@@ -1,17 +1,22 @@
 const request = require('request');
-
+// const FormData = require('form-data');
 
 const send = ({
   data,
   url
 }) => new Promise((res, rej) => {
+  const dataString = JSON.stringify(data);
+  const buffer = new Buffer.from(dataString);
+
   request({
     url,
     method: 'POST',
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify(data)
+    formData: {
+      file: {
+        value: buffer,
+        options: { contentType: 'application/json', filename: 'x.json' }
+      }
+    }
   }, (err, response, body) => {
     if (err) {
       rej(err);

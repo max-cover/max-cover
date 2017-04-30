@@ -23,7 +23,7 @@ const cwd = process.cwd();
 module.exports = args => {
   let options = {
     gitPath: cwd,
-    appUrl: 'http://10.0.0.3:8080'
+    appUrl: 'http://localhost:8080'
   };
 
   // Add requiredParams to options object
