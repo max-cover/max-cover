@@ -37,4 +37,11 @@ module.exports = (
     }
   )))
 ))
-.then(arrayToMappedObject('fileName'));
+.then(arr => arr.map(data => Object.assign(
+  {},
+  data,
+  {
+    fileName: undefined,
+    file: data.fileName
+  }
+)));

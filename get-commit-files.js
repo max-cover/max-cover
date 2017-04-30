@@ -1,5 +1,3 @@
-const arrayToMappedObject = require('./array-to-mapped-object.js');
-
 module.exports = (
   commitId,
   {
@@ -13,5 +11,4 @@ module.exports = (
       res(diffSummary.files);
     }
   });
-})
-.then(arrayToMappedObject('file'));
+});
